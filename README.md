@@ -61,7 +61,7 @@ systemd_journal_upload_server_certificate_file: '/etc/ssl/certs/fqdn.pem'
 The file containing the CA certificates.
 
 ```yaml
-systemd_journal_upload_trusted_certificate_file: /etc/ssl/certs/ca.cert.pem'
+systemd_journal_upload_trusted_certificate_file: '/etc/ssl/certs/ca.cert.pem'
 ```
 
 **Optional:** No
@@ -76,12 +76,12 @@ in as parameters) is always nice for users too:
 ```yaml
 - hosts: servers
   roles:
-     - role: unibeid.systemd-journal-upload
+     - role: unibeid.systemd_journal_upload
        vars:
-         - systemd_journal_upload_url: 'https://server.domain.com:19532'
-         - systemd_journal_upload_server_key_file: '/etc/ssl/certs/fqdn.key'
-         - systemd_journal_upload_server_certificate_file: '/etc/ssl/certs/fqdn.pem'
-         - systemd_journal_upload_trusted_certificate_file: /etc/ssl/certs/ca.cert.pem'
+         systemd_journal_upload_url: 'https://server.domain.com:19532'
+         systemd_journal_upload_server_key_file: '/etc/ssl/certs/fqdn.key'
+         systemd_journal_upload_server_certificate_file: '/etc/ssl/certs/fqdn.pem'
+         systemd_journal_upload_trusted_certificate_file: '/etc/ssl/certs/ca.cert.pem'
 ```
 
 ## Compatibility

@@ -2,7 +2,12 @@
 - name: Converge
   hosts: all
   gather_facts: true
+  vars:
+    systemd_journal_upload_url: "https://logs.example.com:12345"
+    systemd_journal_upload_server_key_file: "/etc/pki/tls/private/logs.example.com.key"
+    systemd_journal_upload_server_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
+    systemd_journal_upload_trusted_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
   tasks:
     - name: "Include ansible-role-systemd-journal-upload"
       ansible.builtin.include_role:
-        name: "unibeid.systemd-journal-upload"
+        name: "unibeid.systemd_journal_upload"

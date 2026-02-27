@@ -16,6 +16,20 @@
 - name: Check the presence of all mandatory variables
   ansible.builtin.include_tasks: check_mandatory_vars.yml
 
+- name: Create systemd-journal-upload group
+  ansible.builtin.group:
+    name: systemd-journal-upload
+    state: present
+    system: true
+
+- name: Add systemd-journal-upload user
+  ansible.builtin.user:
+    name: systemd-journal-upload
+    group: systemd-journal-upload
+    shell: /sbin/nologin
+    system: true
+    create_home: no
+
 - name: Install the systemd-journal-upload package
   ansible.builtin.package:
     name: "{{ __systemd_journal_upload_package }}"
@@ -23,10 +37,10 @@
 
 - name: Template systemd-journal-upload configuration file
   ansible.builtin.template:
-    src: systemd-journal-upload.conf.j2
+    src: journal-upload.conf.j2
     dest: /etc/systemd/journal-upload.conf
     owner: root
-    group: root
+    group: systemd-journal-upload
     mode: '0640'
   notify:
     - Reload systemd
@@ -34,7 +48,5 @@
 
 - name: Enable systemd-journal-upload services
   ansible.builtin.systemd:
-    name: {{ item }}
-    enabled: yes
-  loop:
-    - systemd-journal-upload.service
+    name:  systemd-journal-upload.service
+    enabled: true
