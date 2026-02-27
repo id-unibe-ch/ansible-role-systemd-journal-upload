@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: unibeid
+  description: A systemd-journal-upload role
+  company: IT-Services Office of the University of Bern
+
+  role_name: systemd_journal_upload
+  namespace: unibeid
+
+  license: MIT
+
+  min_ansible_version: '2.1'
+
+  platforms:
+    - name: EL
+      versions:
+        - '9'
+
+  galaxy_tags: []
+
+dependencies: []

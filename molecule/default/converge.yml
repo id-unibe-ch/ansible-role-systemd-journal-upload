@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: "Include ansible-role-systemd-journal-upload"
+      ansible.builtin.include_role:
+        name: "unibeid.systemd-journal-upload"

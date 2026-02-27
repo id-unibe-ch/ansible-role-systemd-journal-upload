@@ -1,0 +1,12 @@
+---
+- name: Make sure all the required variables are defined
+  ansible.builtin.assert:
+    that:
+      - item is defined
+    quiet: true
+    fail_msg: 'The variable "{{ item }}" is required'
+  loop:
+    - systemd_journal_upload_url
+    - systemd_journal_upload_server_key_file
+    - systemd_journal_upload_server_certificate_file
+    - systemd_journal_upload_trusted_certificate_file
