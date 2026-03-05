@@ -1,0 +1,52 @@
+---
+# tasks file for systemd-journal-upload
+#
+
+- name: Include OS-specific variables.
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Include distribution and version-specific vars.
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution }}.yml"
+      skip: true
+
+- name: Check the presence of all mandatory variables
+  ansible.builtin.include_tasks: check_mandatory_vars.yml
+
+- name: Create systemd-journal-upload group
+  ansible.builtin.group:
+    name: systemd-journal-upload
+    state: present
+    system: true
+
+- name: Add systemd-journal-upload user
+  ansible.builtin.user:
+    name: systemd-journal-upload
+    group: systemd-journal-upload
+    shell: /sbin/nologin
+    system: true
+    create_home: no
+
+- name: Install the systemd-journal-upload package
+  ansible.builtin.package:
+    name: "{{ __systemd_journal_upload_package }}"
+    state: present
+
+- name: Template systemd-journal-upload configuration file
+  ansible.builtin.template:
+    src: journal-upload.conf.j2
+    dest: /etc/systemd/journal-upload.conf
+    owner: root
+    group: systemd-journal-upload
+    mode: '0640'
+  notify:
+    - Reload systemd
+    - Restart systemd-journal-upload.service
+
+- name: Enable systemd-journal-upload services
+  ansible.builtin.systemd:
+    name:  systemd-journal-upload.service
+    enabled: true

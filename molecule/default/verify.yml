@@ -1,0 +1,18 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check journal-upload configuration file
+      ansible.builtin.stat:
+        path: /etc/systemd/journal-upload.conf
+      register: journal_upload_conf
+
+    - name: Assert journal-upload configuration file exists with correct mode
+      ansible.builtin.assert:
+        that:
+          - journal_upload_conf.stat.exists
+          - journal_upload_conf.stat.mode == '0640'
+        fail_msg: "/etc/systemd/journal-upload.conf is missing or does not have mode 0640"
