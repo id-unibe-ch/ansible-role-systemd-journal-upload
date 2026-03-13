@@ -1,2 +1,5 @@
 ---
 # defaults file for systemd-journal-upload
+
+systemd_journal_upload_restart: "on-failure"
+systemd_journal_upload_restart_sec: "30s"
