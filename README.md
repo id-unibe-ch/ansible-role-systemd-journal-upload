@@ -91,7 +91,7 @@ systemd_journal_upload_restart_sec: "30s"
 
 **Optional:** Yes
 
-**Default value:** `5s`
+**Default value:** `30s`
 
 ## Example Playbook
 
