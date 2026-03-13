@@ -1,0 +1,4 @@
+{{ ansible_managed | comment }}
+[Service]
+Restart={{ systemd_journal_upload_restart }}
+RestartSec={{ systemd_journal_upload_restart_sec }}
