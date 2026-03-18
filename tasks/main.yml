@@ -46,6 +46,25 @@
     - Reload systemd
     - Restart systemd-journal-upload.service
 
+- name: Create systemd drop-in directory for systemd-journal-upload
+  ansible.builtin.file:
+    path: /etc/systemd/system/systemd-journal-upload.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Template systemd-journal-upload service drop-in override
+  ansible.builtin.template:
+    src: journal-upload-override.conf.j2
+    dest: /etc/systemd/system/systemd-journal-upload.service.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart systemd-journal-upload.service
+
 - name: Enable systemd-journal-upload services
   ansible.builtin.systemd:
     name:  systemd-journal-upload.service

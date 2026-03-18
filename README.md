@@ -5,6 +5,7 @@ features:
 
 * Install systemd-journal-upload
 * Configure `/etc/systemd/journal-upload.conf`
+* Configure automatic service restart via a systemd drop-in override
 
 ## Requirements
 
@@ -67,6 +68,30 @@ systemd_journal_upload_trusted_certificate_file: '/etc/ssl/certs/ca.cert.pem'
 **Optional:** No
 
 **Default value:** Undefined
+
+### systemd_journal_upload_restart
+
+The systemd `Restart=` value for the service drop-in override. Controls when the service is automatically restarted.
+
+```yaml
+systemd_journal_upload_restart: "on-failure"
+```
+
+**Optional:** Yes
+
+**Default value:** `on-failure`
+
+### systemd_journal_upload_restart_sec
+
+The systemd `RestartSec=` value for the service drop-in override. Sets the time to sleep before restarting the service.
+
+```yaml
+systemd_journal_upload_restart_sec: "30s"
+```
+
+**Optional:** Yes
+
+**Default value:** `30s`
 
 ## Example Playbook
 

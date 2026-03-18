@@ -4,8 +4,15 @@
 - name: Verify
   hosts: all
   gather_facts: false
+  vars:
+    expected_url: "https://logs.example.com:12345"
+    expected_server_key_file: "/etc/pki/tls/private/logs.example.com.key"
+    expected_server_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
+    expected_trusted_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
+    expected_restart: "always"
+    expected_restart_sec: "7s"
   tasks:
-    - name: Check journal-upload configuration file
+    - name: Check journal-upload configuration file metadata
       ansible.builtin.stat:
         path: /etc/systemd/journal-upload.conf
       register: journal_upload_conf
@@ -16,3 +23,48 @@
           - journal_upload_conf.stat.exists
           - journal_upload_conf.stat.mode == '0640'
         fail_msg: "/etc/systemd/journal-upload.conf is missing or does not have mode 0640"
+
+    - name: Check systemd override configuration file metadata
+      ansible.builtin.stat:
+        path: /etc/systemd/system/systemd-journal-upload.service.d/override.conf
+      register: journal_upload_override_conf
+
+    - name: Assert systemd override configuration file exists with correct mode
+      ansible.builtin.assert:
+        that:
+          - journal_upload_override_conf.stat.exists
+          - journal_upload_override_conf.stat.mode == '0644'
+        fail_msg: "override.conf is missing or does not have mode 0644"
+
+    - name: Read journal-upload configuration file
+      ansible.builtin.slurp:
+        path: /etc/systemd/journal-upload.conf
+      register: journal_upload_conf_content_raw
+
+    - name: Read systemd override configuration file
+      ansible.builtin.slurp:
+        path: /etc/systemd/system/systemd-journal-upload.service.d/override.conf
+      register: journal_upload_override_conf_content_raw
+
+    - name: Decode rendered configuration content
+      ansible.builtin.set_fact:
+        journal_upload_conf_content: "{{ journal_upload_conf_content_raw.content | b64decode }}"
+        journal_upload_override_conf_content: "{{ journal_upload_override_conf_content_raw.content | b64decode }}"
+
+    - name: Assert all upload configuration options are rendered
+      ansible.builtin.assert:
+        that:
+          - "'[Upload]' in journal_upload_conf_content"
+          - "'URL=' ~ expected_url in journal_upload_conf_content"
+          - "'ServerKeyFile=' ~ expected_server_key_file in journal_upload_conf_content"
+          - "'ServerCertificateFile=' ~ expected_server_certificate_file in journal_upload_conf_content"
+          - "'TrustedCertificateFile=' ~ expected_trusted_certificate_file in journal_upload_conf_content"
+        fail_msg: "journal-upload.conf does not contain the expected upload directives"
+
+    - name: Assert all restart override options are rendered
+      ansible.builtin.assert:
+        that:
+          - "'[Service]' in journal_upload_override_conf_content"
+          - "'Restart=' ~ expected_restart in journal_upload_override_conf_content"
+          - "'RestartSec=' ~ expected_restart_sec in journal_upload_override_conf_content"
+        fail_msg: "override.conf does not contain the expected restart directives"
