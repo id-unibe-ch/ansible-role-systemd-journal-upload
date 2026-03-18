@@ -7,6 +7,8 @@
     systemd_journal_upload_server_key_file: "/etc/pki/tls/private/logs.example.com.key"
     systemd_journal_upload_server_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
     systemd_journal_upload_trusted_certificate_file: "/etc/pki/tls/certs/logs.example.com.crt"
+    systemd_journal_upload_restart: "always"
+    systemd_journal_upload_restart_sec: "7s"
   tasks:
     - name: "Include ansible-role-systemd-journal-upload"
       ansible.builtin.include_role:
