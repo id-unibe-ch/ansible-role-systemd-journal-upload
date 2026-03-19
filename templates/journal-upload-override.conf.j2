@@ -1,4 +1,8 @@
 {{ ansible_managed | comment }}
+[Unit]
+StartLimitBurst={{ systemd_journal_upload_start_limit_burst }}
+StartLimitIntervalSec={{ systemd_journal_upload_start_limit_interval_sec }}
+
 [Service]
 Restart={{ systemd_journal_upload_restart }}
 RestartSec={{ systemd_journal_upload_restart_sec }}

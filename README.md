@@ -86,12 +86,36 @@ systemd_journal_upload_restart: "on-failure"
 The systemd `RestartSec=` value for the service drop-in override. Sets the time to sleep before restarting the service.
 
 ```yaml
-systemd_journal_upload_restart_sec: "30s"
+systemd_journal_upload_restart_sec: "60"
 ```
 
 **Optional:** Yes
 
-**Default value:** `30s`
+**Default value:** `60`
+
+### systemd_journal_upload_start_limit_burst
+
+The systemd `StartLimitBurst=` value for the service drop-in override. Sets the maximum number of start attempts allowed within the interval defined by `systemd_journal_upload_start_limit_interval_sec` before the service is considered failed.
+
+```yaml
+systemd_journal_upload_start_limit_burst: 10
+```
+
+**Optional:** Yes
+
+**Default value:** `10`
+
+### systemd_journal_upload_start_limit_interval_sec
+
+The systemd `StartLimitIntervalSec=` value for the service drop-in override. Sets the time interval over which start attempts are counted.
+
+```yaml
+systemd_journal_upload_start_limit_interval_sec: "600"
+```
+
+**Optional:** Yes
+
+**Default value:** `600`
 
 ## Example Playbook
 
