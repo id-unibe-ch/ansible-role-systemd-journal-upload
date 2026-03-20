@@ -98,12 +98,12 @@ systemd_journal_upload_restart_sec: "60"
 The systemd `StartLimitBurst=` value for the service drop-in override. Sets the maximum number of start attempts allowed within the interval defined by `systemd_journal_upload_start_limit_interval_sec` before the service is considered failed.
 
 ```yaml
-systemd_journal_upload_start_limit_burst: 10
+systemd_journal_upload_start_limit_burst: 8
 ```
 
 **Optional:** Yes
 
-**Default value:** `10`
+**Default value:** `8`
 
 ### systemd_journal_upload_start_limit_interval_sec
 
