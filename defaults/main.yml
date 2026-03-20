@@ -3,5 +3,5 @@
 
 systemd_journal_upload_restart: "on-failure"
 systemd_journal_upload_restart_sec: "60"
-systemd_journal_upload_start_limit_burst: 10
+systemd_journal_upload_start_limit_burst: 8
 systemd_journal_upload_start_limit_interval_sec: "600"
